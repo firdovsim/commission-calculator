@@ -11,12 +11,10 @@ function isEu($countryCode): string
     return in_array($countryCode, $euCountries);
 }
 
-function getBinResults($bin)
+function readTransactions(string $filename): Generator
 {
-    $url = 'https://lookup.binlist.net/' . $bin;
-    $results = file_get_contents($url);
-    if (! $results) {
-        throw new Exception('Failed to fetch data from ' . $url);
+    $file = new SplFileObject($filename, 'r');
+    while (!$file->eof()) {
+        yield trim($file->fgets());
     }
-    return json_decode($results, true);
 }
